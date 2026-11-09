@@ -541,6 +541,10 @@ EBuildingState CGameInfoCallback::canBuildStructure( const CGTownInstance *t, Bu
 	if(ID == BuildingID::GRAIL && !isGrailAllowed(t))
 		return EBuildingState::FORBIDDEN;
 
+	// CGameHandler::buildStructure builds a BUILD_GRAIL structure only for a visiting hero who carries the Grail
+	if(building->mode == CBuilding::BUILD_GRAIL && (!t->getVisitingHero() || !t->getVisitingHero()->hasArt(ArtifactID::GRAIL)))
+		return EBuildingState::FORBIDDEN;
+
 	auto possiblyNotBuiltTest = [&](const BuildingID & id) -> bool
 	{
 		return ((id == BuildingID::CAPITOL) ? true : !t->hasBuilt(id));
